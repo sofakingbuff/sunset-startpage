@@ -1,0 +1,79 @@
+<html>
+    <head>
+        <link href="style.css" rel="stylesheet" type="text/css">
+        <link href='https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900' rel='stylesheet' type='text/css'>
+        <script type="text/javascript" src="./categories.js"></script>
+        <title>StartPage</title>
+    </head>
+    <body onLoad="onLoad()">
+        <span id="scaffold">
+            <img src="sun.gif" class="sun">
+            <div id="navBar">
+            </div>
+        </span>
+        <script>
+            var pages;
+            var categoriesIndex = 0;
+            var categoriesContainerIndex = 0;
+            var categoriesContainer;
+
+            function onLoad() {
+                categoriesContainer = document.createElement('div');
+                categoriesContainer.id = "categories-container" + categoriesContainerIndex;
+                document.getElementById('scaffold').insertBefore(categoriesContainer, document.getElementById('navBar'));
+                for (let i = 0; i < categories.length; i++) {
+                    if (i % 4 === 0 && i > 0) {
+                        categoriesContainerIndex++;
+                        categoriesContainer = document.createElement('div');
+                        categoriesContainer.id = "categories-container" + categoriesContainerIndex;
+                        categoriesContainer.style.display = "none";
+                        document.getElementById('scaffold').insertBefore(categoriesContainer, document.getElementById('navBar'));
+                    }
+					categoriesContainer.classList.add('categories-container');
+                    const categoryDiv = document.createElement('div');
+                    categoryDiv.id = "category" + (i+1);
+                    categoryDiv.classList.add('category');
+                    const categoryTitle = document.createElement('h3');
+                    categoryTitle.textContent = categories[i].title;
+                    categoryDiv.appendChild(categoryTitle);
+
+                    const links = categories[i].links;
+                    for (let j = 0; j < links.length; j++) {
+                        const link = links[j];
+                        const linkElem = document.createElement('a');
+                        linkElem.href = link.link;
+                        linkElem.textContent = link.title;
+                        categoryDiv.appendChild(linkElem);
+                    }
+                    categoriesContainer.appendChild(categoryDiv);
+                    categoriesIndex++;
+                }
+                pages = Math.ceil(categoriesIndex / 4);
+                for (let i = 0; i < pages; i++) {
+                    const element = document.createElement("label");
+                    element.id = "navigator" + i
+                    element.onclick = function() { showPage(i) };
+                    document.getElementById('navBar').appendChild(element);
+					if(i==0) {
+						document.getElementById("navigator" + i).classList.add('selected');
+					}
+
+                }
+                document.getElementById("categories-container0").style.display = "flex";
+            }
+
+            function showPage(index) {
+                for (let i = 0; i < pages; i++) {
+                    if (i == index) {
+                        document.getElementById("categories-container" + i).style.display = "flex";
+						document.getElementById("navigator" + i).classList.add('selected');
+                    } else {
+                        document.getElementById("categories-container" + i).style.display = "none";
+						document.getElementById("navigator" + i).classList.remove('selected');
+                    }
+                }
+            }
+
+        </script>
+    </body>
+</html>
